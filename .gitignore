@@ -1,3 +1,6 @@
-.DS_Store
-itchat.pkl
-__pycache__
+*.DS_Store
+*itchat.pkl
+*__pycache__
+*build
+*dist
+*.egg-info

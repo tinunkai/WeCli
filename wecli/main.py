@@ -8,13 +8,13 @@ import code
 import atexit
 import os
 import re
-import colorama
 try:
     import readline
 except:
     pass
 
 import itchat
+import colorama
 
 CQR = colorama.Fore.WHITE + colorama.Back.BLACK
 CFRIEND = colorama.Fore.MAGENTA
@@ -154,9 +154,12 @@ class MsgCli(code.InteractiveConsole):
             sys.ps1 = self.ps_contact
             self.status = 'incontact'
 
-if __name__ == '__main__':
+def main():
     msg_cli = MsgCli()
     sys.ps1 = MsgCli.ps_command
     print('Welcome to Cli WeChat!')
     msg_cli.interact(r'Type \h for help')
+
+if __name__ == '__main__':
+    main()
 
