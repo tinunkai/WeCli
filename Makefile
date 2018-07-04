@@ -1,4 +1,4 @@
-all: test
+all: deploy
 
 deploy:
 	rm -rf dist build *.egg-info

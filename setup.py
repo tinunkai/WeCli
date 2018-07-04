@@ -7,7 +7,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='wecli',
-    version='0.1.2',
+    version='0.1.4',
     author='Tin Unkai',
     author_email='tinunkai@gmail.com',
     description='A wechat client in terminal.',
