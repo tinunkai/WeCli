@@ -1,5 +1,6 @@
 itchat.pkl
 .DS_Store
+.wecli
 
 #Default python gitignore######################################################################
 
