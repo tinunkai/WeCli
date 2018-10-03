@@ -26,23 +26,43 @@ CEND = colorama.Style.RESET_ALL
 
 itchat.log.set_logging(loggingLevel=logging.INFO)
 
+print(CQR)
+itchat.auto_login(enableCmdQR=2, hotReload=True)
+print(CEND)
+
+friends = itchat.get_friends()
+groups = itchat.get_chatrooms()
+key = 0
+contacts = dict()
+key_table = dict()
+for friend in friends:
+    key_table[friend['UserName']] = key
+    contacts[key] = {'NickName': friend['NickName'], 'UserName': friend['UserName']}
+    key += 1
+for group in groups:
+    key_table[group['UserName']] = key
+    contacts[key] = {'NickName': group['NickName'], 'UserName': group['UserName']}
+    key += 1
+
 @itchat.msg_register(itchat.content.INCOME_MSG, isGroupChat=True)
 def group_print(msg):
     try:
-        print(CGROUP + msg['User']['NickName'] + '--' + msg['ActualNickName'] + '=>' + msg.text + CEND)
+        print(CGROUP + msg['User']['NickName'] + '--' + msg['ActualNickName'] + ' #'+ '{}'.format(key_table[msg['User']['UserName']]) + '>>' + msg.text + CEND)
     except:
-        pass
+        try:
+            print(CGROUP + '(' + msg['User']['NickName'] + '--' + msg['ActualNickName'] + ')' + CEND)
+        except:
+            print(CGROUP + '(some msg)' + CEND)
 
 @itchat.msg_register(itchat.content.INCOME_MSG, isFriendChat=True)
 def friend_print(msg):
     try:
-        print(CFRIEND + msg['User']['NickName'] + '=>' + msg.text + CEND)
+        print(CFRIEND + msg['User']['NickName'] + ' #' + '{}'.format(key_table[msg['User']['UserName']]) + '>>' + msg.text + CEND)
     except:
-        pass
-
-def send_msg(msg, name):
-    user_name = itchat.search_friends(nickName=name)[0]['UserName']
-    return itchat.send_msg(msg=msg, toUserName=user_name)
+        try:
+            print(CFRIEND + '(' + msg['User']['NickName'] + ' #{}'.format(key_table[msg['User']['UserName']]) + ')' + CEND)
+        except:
+            print(CFRIEND + '(some msg)' + CEND)
 
 def print_members(userName):
     try:
@@ -55,7 +75,7 @@ def print_members(userName):
     return True
 
 class MsgCli(code.InteractiveConsole):
-    ps_contact = '<='
+    ps_contact = '<<'
     ps_command = 'WeChat>>'
     ps_confirm = 'Send?[Y/n]>'
     def __init__(self, local=None, filename='<console>', hisfile=os.path.expanduser('~/.we_cli_his')):
@@ -63,28 +83,8 @@ class MsgCli(code.InteractiveConsole):
 
         colorama.init()
         self.status = 'command'
-        self.contacts = dict()
 
-        print(CQR)
-        itchat.auto_login(enableCmdQR=2, hotReload=True)
-        print(CEND)
         itchat.run(blockThread=False)
-
-        friends = itchat.get_friends()
-        groups = itchat.get_chatrooms()
-        key = 0
-        for friend in friends:
-            row = dict()
-            row['NickName'] = friend['NickName']
-            row['UserName'] = friend['UserName']
-            self.contacts[key] = row
-            key += 1
-        for group in groups:
-            row = dict()
-            row['NickName'] = group['NickName']
-            row['UserName'] = group['UserName']
-            self.contacts[key] = row
-            key += 1
 
     def print_help(self):
         if self.status == 'command':
@@ -102,7 +102,7 @@ class MsgCli(code.InteractiveConsole):
         if self.status == 'command':
             sys.ps1 = self.ps_command
             if line == r'\l':
-                for key, contact in self.contacts.items():
+                for key, contact in contacts.items():
                     print(key, contact['NickName'])
             elif re.search(r'^\\g', line):
                 try:
@@ -110,9 +110,9 @@ class MsgCli(code.InteractiveConsole):
                 except:
                     self.print_help()
                 else:
-                    if key >= 0 and key < len(self.contacts):
-                        self.contact = self.contacts[key]
-                        self.ps_contact = self.contact['NickName'] + '<='
+                    if key >= 0 and key < len(contacts):
+                        self.contact = contacts[key]
+                        self.ps_contact = self.contact['NickName'] + '<<'
                         sys.ps1 = self.ps_contact
                         self.status = 'incontact'
             elif line == r'\h' or line != '':
