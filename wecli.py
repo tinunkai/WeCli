@@ -48,11 +48,22 @@ for group in groups:
 @itchat.msg_register(itchat.content.INCOME_MSG, isGroupChat=True)
 def group_print(msg):
     try:
-        print(CGROUP + msg['User']['NickName'] + '--' + msg['ActualNickName'] + ' #'+ '{}'.format(key_table[msg['User']['UserName']]) + '>>' + msg.text + CEND)
+        print(CGROUP + msg['User']['NickName'] + '--' + msg['ActualNickName']
+                + ' #'+ '{}'.format(key_table[msg['User']['UserName']]) + '>>' + msg.text + CEND)
     except:
         try:
-            print(CGROUP + '(' + msg['User']['NickName'] + '--' + msg['ActualNickName'] + ')' + CEND)
-            print(msg)
+            print(CGROUP + '(' + msg['User']['NickName'] + '--' + msg['ActualNickName']
+                    + ' #'+ '{}'.format(key_table[msg['User']['UserName']])
+                    + msg['Type'] + ')' + CEND)
+            if msg['MsgType'] == 3:
+                with open('%s.png' % datetime.now().timestamp(), 'wb') as f:
+                    f.write(msg['Text']())
+            if msg['MsgType'] == 62:
+                with open('%s.mov' % datetime.now().timestamp(), 'wb') as f:
+                    f.write(msg['Text']())
+            if msg['MsgType'] == 34:
+                with open('%s.wav' % datetime.now().timestamp(), 'wb') as f:
+                    f.write(msg['Text']())
         except:
             print(CGROUP + '(system msg)' + CEND)
 
@@ -64,8 +75,7 @@ def friend_print(msg):
         try:
             print(CFRIEND + '(' + msg['User']['NickName']
                     + ' #{} '.format(key_table[msg['User']['UserName']])
-                    + msg['Type'] + ')'
-                    + CEND)
+                    + msg['Type'] + ')' + CEND)
             if msg['MsgType'] == 3:
                 with open('%s.png' % datetime.now().timestamp(), 'wb') as f:
                     f.write(msg['Text']())
