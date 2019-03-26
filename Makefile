@@ -13,10 +13,11 @@ test:
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 run:
-	./.wecli/bin/python wecli.py
+	./.venv/bin/python wecli.py
 
 install:
-	./.wecli/bin/pip install -r requirements.txt
+	./.venv/bin/pip install --upgrade pip
+	./.venv/bin/pip install --upgrade -r requirements.txt
 
 init:
-	python3 -m venv .wecli
+	python3 -m venv .venv
