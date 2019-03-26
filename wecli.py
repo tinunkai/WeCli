@@ -14,6 +14,7 @@ try:
 except:
     pass
 
+import numpy as np
 import itchat
 import colorama
 
@@ -24,6 +25,37 @@ CRED = colorama.Fore.RED
 CYELLOW = colorama.Fore.YELLOW
 CGREEN = colorama.Fore.GREEN
 CEND = colorama.Style.RESET_ALL
+
+def print_cmd_qr(qrText, enableCmdQR=True):
+    up_half = '\u2580'
+    down_half = '\u2584'
+    full_block = '\u2588'
+    blank = ' '
+    qr = qrText.split('\n')
+    qr = list(list(map(int, row)) for row in qr[:-1])
+    qr = list(map(list, zip(*qr)))
+    qr_block = [list() for _ in range((len(qr[0]) + 1) // 2)]
+    for i in range(len(qr)):
+        for j in range(0, len(qr[0]), 2):
+            if len(qr[i][j:j+2]) == 2:
+                block = qr[i][j:j+2]
+            else:
+                block = qr[i][j:j+2] + [1]
+            if block == [0, 0]:
+                qr_block[j//2].append(full_block)
+            elif block == [1, 0]:
+                qr_block[j//2].append(down_half)
+            elif block == [0, 1]:
+                qr_block[j//2].append(up_half)
+            elif block == [1, 1]:
+                qr_block[j//2].append(blank)
+
+    for row in qr_block:
+        for e in row:
+            print(e, end='')
+        print()
+
+itchat.utils.print_cmd_qr = print_cmd_qr
 
 itchat.log.set_logging(loggingLevel=logging.INFO)
 

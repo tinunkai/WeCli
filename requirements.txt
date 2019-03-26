@@ -1,2 +1,3 @@
 itchat
 colorama
+numpy
