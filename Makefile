@@ -20,7 +20,7 @@ install:
 	.venv/bin/pip install -r requirements.txt
 
 init:
-	python3 -m venv .venv
+	python -m venv .venv
 
 winstall:
 	.venv\Scripts\pip install --upgrade pip
