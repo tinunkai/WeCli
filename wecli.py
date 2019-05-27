@@ -88,16 +88,16 @@ def group_print(msg):
                     + ' #'+ '{}'.format(key_table[msg['User']['UserName']])
                     + msg['Type'] + ')' + CEND)
             if msg['MsgType'] == 3:
-                with open('%s.png' % datetime.now().timestamp(), 'wb') as f:
+                with open('./png/%s.png' % datetime.now().timestamp(), 'wb') as f:
                     f.write(msg['Text']())
             if msg['MsgType'] == 62:
-                with open('%s.mov' % datetime.now().timestamp(), 'wb') as f:
+                with open('./mov/%s.mov' % datetime.now().timestamp(), 'wb') as f:
                     f.write(msg['Text']())
             if msg['MsgType'] == 34:
-                with open('%s.wav' % datetime.now().timestamp(), 'wb') as f:
+                with open('./wav/%s.wav' % datetime.now().timestamp(), 'wb') as f:
                     f.write(msg['Text']())
         except:
-            print(CGROUP + '(system msg)' + CEND)
+            print(CGROUP + '(Unkown msg)' + CEND)
 
 @itchat.msg_register(itchat.content.INCOME_MSG, isFriendChat=True)
 def friend_print(msg):
@@ -109,16 +109,16 @@ def friend_print(msg):
                     + ' #{} '.format(key_table[msg['User']['UserName']])
                     + msg['Type'] + ')' + CEND)
             if msg['MsgType'] == 3:
-                with open('%s.png' % datetime.now().timestamp(), 'wb') as f:
+                with open('./png/%s.png' % datetime.now().timestamp(), 'wb') as f:
                     f.write(msg['Text']())
             if msg['MsgType'] == 62:
-                with open('%s.mov' % datetime.now().timestamp(), 'wb') as f:
+                with open('./mov/%s.mov' % datetime.now().timestamp(), 'wb') as f:
                     f.write(msg['Text']())
             if msg['MsgType'] == 34:
-                with open('%s.wav' % datetime.now().timestamp(), 'wb') as f:
+                with open('./wav/%s.wav' % datetime.now().timestamp(), 'wb') as f:
                     f.write(msg['Text']())
         except:
-            print(CFRIEND + '(system msg)' + CEND)
+            print(CFRIEND + '(Unkown msg)' + CEND)
 
 def print_members(userName):
     try:

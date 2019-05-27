@@ -19,8 +19,11 @@ install:
 	.venv/bin/pip install --upgrade pip
 	.venv/bin/pip install -r requirements.txt
 
-init:
+init: dir
 	python -m venv .venv
+
+dir:
+	mkdir -p png wav mov
 
 winstall:
 	.venv\Scripts\pip install --upgrade pip
