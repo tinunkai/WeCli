@@ -31,3 +31,6 @@ winstall:
 
 wrun:
 	.venv\Scripts\python wecli.py
+
+pkl:
+	.venv/bin/python pkl.py

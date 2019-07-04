@@ -14,6 +14,7 @@ try:
 except:
     pass
 
+import requests
 import numpy as np
 import itchat
 import colorama
@@ -88,8 +89,9 @@ def group_print(msg):
                     + ' #'+ '{}'.format(key_table[msg['User']['UserName']])
                     + msg['Type'] + ')' + CEND)
             if msg['MsgType'] == 3:
-                with open('./png/%s.png' % datetime.now().timestamp(), 'wb') as f:
+                with open('tmp.png', 'wb') as f:
                     f.write(msg['Text']())
+                forward()
             if msg['MsgType'] == 62:
                 with open('./mov/%s.mov' % datetime.now().timestamp(), 'wb') as f:
                     f.write(msg['Text']())
@@ -109,8 +111,9 @@ def friend_print(msg):
                     + ' #{} '.format(key_table[msg['User']['UserName']])
                     + msg['Type'] + ')' + CEND)
             if msg['MsgType'] == 3:
-                with open('./png/%s.png' % datetime.now().timestamp(), 'wb') as f:
+                with open('tmp.png', 'wb') as f:
                     f.write(msg['Text']())
+                forward()
             if msg['MsgType'] == 62:
                 with open('./mov/%s.mov' % datetime.now().timestamp(), 'wb') as f:
                     f.write(msg['Text']())
@@ -129,6 +132,14 @@ def print_members(userName):
         print(member['NickName'])
     print('{} members'.format(len(members)))
     return True
+
+def forward():
+    param = {
+        'token': 'xoxp-239158785445-239908733558-684388134196-bd82d5cd3f1a6c2ebbc59b67eb428fd6',
+        'channels': 'D70ESM5PB',
+    }
+    files = {'file': open('tmp.png', 'rb')}
+    requests.post(url='https://slack.com/api/files.upload', params=param, files=files)
 
 class MsgCli(code.InteractiveConsole):
     ps_contact = '<<'

@@ -1,3 +1,4 @@
 itchat
 colorama
 numpy
+requests
