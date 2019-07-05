@@ -9,6 +9,7 @@ import code
 import atexit
 import os
 import re
+import json
 try:
     import readline
 except:
@@ -99,7 +100,7 @@ def group_print(msg):
                 with open('./wav/%s.wav' % datetime.now().timestamp(), 'wb') as f:
                     f.write(msg['Text']())
         except:
-            print(CGROUP + '(Unkown msg)' + CEND)
+            print(sys.exc_info()[0])
 
 @itchat.msg_register(itchat.content.INCOME_MSG, isFriendChat=True)
 def friend_print(msg):
@@ -121,7 +122,7 @@ def friend_print(msg):
                 with open('./wav/%s.wav' % datetime.now().timestamp(), 'wb') as f:
                     f.write(msg['Text']())
         except:
-            print(CFRIEND + '(Unkown msg)' + CEND)
+            print(sys.exc_info()[0])
 
 def print_members(userName):
     try:
@@ -134,12 +135,10 @@ def print_members(userName):
     return True
 
 def forward():
-    param = {
-        'token': 'xoxp-239158785445-239908733558-684388134196-bd82d5cd3f1a6c2ebbc59b67eb428fd6',
-        'channels': 'D70ESM5PB',
-    }
+    with open('slack.token', 'r') as f:
+        param = json.load(f)
     files = {'file': open('tmp.png', 'rb')}
-    requests.post(url='https://slack.com/api/files.upload', params=param, files=files)
+    print(requests.post(url='https://slack.com/api/files.upload', params=param, files=files))
 
 class MsgCli(code.InteractiveConsole):
     ps_contact = '<<'
