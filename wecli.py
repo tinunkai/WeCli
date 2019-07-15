@@ -135,7 +135,7 @@ def print_members(userName):
     return True
 
 def forward():
-    with open('slack.token', 'r') as f:
+    with open('slack.token.json', 'r') as f:
         param = json.load(f)
     files = {'file': open('tmp.png', 'rb')}
     print(requests.post(url='https://slack.com/api/files.upload', params=param, files=files))
