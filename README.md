@@ -6,5 +6,5 @@ and [itchat][itchat].
 [itchat]: https://github.com/littlecodersh/ItChat
 
 ## New Features
-[ ] slack forward
-[ ] PGP sign
+- [ ] slack forward
+- [ ] PGP sign
