@@ -5,3 +5,6 @@ and [itchat][itchat].
 [node-wechat-terminal]: https://github.com/goorockey/node-wechat-terminal
 [itchat]: https://github.com/littlecodersh/ItChat
 
+## New Features
+[ ] slack forward
+[ ] PGP sign
