@@ -9,3 +9,6 @@ install:
 
 init:
 	python -m venv .venv
+
+try:
+	.venv/bin/python try.py

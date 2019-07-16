@@ -1,23 +1,92 @@
 import sys,os
 import curses
+import curses.ascii
+from curses.textpad import Textbox
 import time
+import json
+import requests
+from datetime import datetime
 
 import itchat
+from itchat.content import *
 import colorful
 
-def friend_register(stdscr):
-    @itchat.msg_register(itchat.content.INCOME_MSG, isFriendChat=True)
-    def _friend_register(msg):
-        time.sleep(1)
-        stdscr.addstr(0, 0, msg.text)
-        stdscr.refresh()
+class WeCli:
+    def __init__(self, stdscr):
+        self.stdscr = stdscr
+        self.moment = datetime.now()
+        if not os.path.exists(self.msgs_path()):
+            with open(self.msgs_path(), 'w'): pass
+        with open(self.msgs_path(), 'r') as f:
+            self.msgs = f.read()
+        self.make_wins()
+        self.text_register()
+        self.media_register()
+
+    def msgs_path(self):
+        return 'msgs/%s.msg' % self.moment.strftime('%Y%m%d')
+
+    def __call__(self):
+        self.k = None
+        while True:
+            self.k = self.stdscr.getch()
+            if self.k == ord('q'):
+                break
+            if self.k == curses.ascii.ctrl(ord('l')):
+                self.msg_win.clear()
+                self.refresh()
+            elif self.k == ord('i'):
+                pass
+            elif self.k == ord(':'):
+                self.command_win.addstr(0, 0, ':')
+                self.command_box.edit()
+                self.command = self.command_box.gather()
+                self.command_win.clear()
+            elif self.k == curses.KEY_RESIZE:
+                self.make_wins()
+            self.refresh()
+
+    def text_register(self):
+        @itchat.msg_register(TEXT)
+        def _text_register(msg):
+            line = '%s > %s\n' % (msg['User']['NickName'], msg.text)
+            with open(self.msgs_path(), 'a') as f:
+                f.write(line)
+            self.msgs += line
+            self.draw_msg()
+
+    def media_register(self):
+        @itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+        def _media_register(msg):
+            with open('slack.token.json', 'r') as f:
+                param = json.load(f)
+            files = {'file': msg.download(None)}
+            with open(self.msgs_path(), 'a') as f:
+                f.write(msg.fileName)
+            self.msgs += msg.fileName
+            requests.post(url='https://slack.com/api/files.upload', params=param, files=files)
+            self.msg_win.refresh()
+
+    def refresh(self):
+        self.draw_msg()
+        self.command_win.refresh()
+
+    def draw_msg(self):
+        self.msg_win.addstr(0, 0, self.msgs)
+        self.msg_win.refresh()
+
+    def make_wins(self):
+        self.stdscr.erase()
+        self.ym, self.xm = self.stdscr.getmaxyx()
+        self.msg_win = self.stdscr.subwin(self.ym - 1, self.xm, 0, 0)
+        self.command_win = self.stdscr.subwin(1, self.xm, self.ym - 1, 0)
+        self.command_box = Textbox(self.command_win)
+        self.refresh()
 
 def draw_menu(stdscr):
-    friend_register(stdscr)
+    wecli = WeCli(stdscr)
     itchat.run(blockThread=False)
-    stdscr.addstr(1, 0, 'Hello')
-    stdscr.refresh()
-    k = stdscr.getch()
+    wecli()
 
 def main():
     itchat.utils.print_cmd_qr = print_cmd_qr
