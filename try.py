@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 
 import itchat
 from itchat.content import *
@@ -7,7 +8,8 @@ import json
 
 @itchat.msg_register([TEXT])
 def text_msg(msg):
-    print(msg.text)
+    print(datetime.fromtimestamp(msg['CreateTime']))
+    print(msg)
 
 @itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
 def files(msg):
@@ -21,6 +23,8 @@ def main():
     itchat.utils.print_cmd_qr = print_cmd_qr
     itchat.auto_login(enableCmdQR=2, hotReload=True)
     itchat.run(blockThread=False)
+    friends = itchat.get_friends()
+    print(repr(friends))
     input()
 
 def forward():
