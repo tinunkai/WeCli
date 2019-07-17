@@ -6,25 +6,23 @@ from itchat.content import *
 import colorful
 import json
 
-@itchat.msg_register([TEXT])
+@itchat.msg_register([TEXT, MAP, CARD, NOTE, SHARING], isGroupChat=True, isFriendChat=True, isMpChat=True)
 def text_msg(msg):
     print(datetime.fromtimestamp(msg['CreateTime']))
     print(msg)
 
-@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
-def files(msg):
-    with open('slack.token.json', 'r') as f:
-        param = json.load(f)
-    files = {'file': msg.download(None)}
-    print(msg.fileName, end='')
-    print(requests.post(url='https://slack.com/api/files.upload', params=param, files=files))
+#@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+#def files(msg):
+#    with open('slack.token.json', 'r') as f:
+#        param = json.load(f)
+#    files = {'file': msg.download(None)}
+#    print(msg.fileName, end='')
+#    print(requests.post(url='https://slack.com/api/files.upload', params=param, files=files))
 
 def main():
     itchat.utils.print_cmd_qr = print_cmd_qr
     itchat.auto_login(enableCmdQR=2, hotReload=True)
     itchat.run(blockThread=False)
-    friends = itchat.get_friends()
-    print(repr(friends))
     input()
 
 def forward():
