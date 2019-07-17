@@ -218,9 +218,6 @@ class WeCli:
         @itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO],
                 isFriendChat=True, isGroupChat=True, isMpChat=True)
         def _media_register(msg):
-            with open('slack.token.json', 'r') as f:
-                param = json.load(f)
-            files = {'file': msg.download(None)}
             try:
                 name = msg['User']['NickName']
             except KeyError:
@@ -235,7 +232,10 @@ class WeCli:
             self.msgs.append(line)
             with open(self.msgs_path(), 'a') as f:
                 f.write(line)
-            requests.post(url='https://slack.com/api/files.upload', params=param, files=files)
+            #with open('slack.token.json', 'r') as f:
+            #    param = json.load(f)
+            #files = {'file': msg.download(None)}
+            #requests.post(url='https://slack.com/api/files.upload', params=param, files=files)
             self.msg_win.refresh()
 
     def refresh(self):

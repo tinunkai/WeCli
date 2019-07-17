@@ -15,10 +15,10 @@ def text_msg(msg):
 def files(msg):
     print(datetime.fromtimestamp(msg['CreateTime']))
     print(msg)
-    #with open('slack.token.json', 'r') as f:
-    #    param = json.load(f)
-    #files = {'file': msg.download(None)}
-    #print(requests.post(url='https://slack.com/api/files.upload', params=param, files=files))
+    with open('slack.token.json', 'r') as f:
+        param = json.load(f)
+    files = {'file': msg.download(None)}
+    requests.post(url='https://slack.com/api/files.upload', params=param, files=files)
 
 def main():
     itchat.utils.print_cmd_qr = print_cmd_qr
