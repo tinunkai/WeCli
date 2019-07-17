@@ -68,11 +68,10 @@ class WeCli:
                 self.linetop = 0
                 self.draw_msg()
             elif self.k == ord('G'):
-                self.linetop = len(self.msgs) - self.ym + 1
+                self.linetop = len(self.msgs) - 1
                 self.draw_msg()
             elif self.k == ord(':'):
                 self.select_contact()
-                self.get_input()
             elif self.k == ord('i'):
                 self.get_input()
             elif self.k == curses.KEY_RESIZE:
@@ -82,7 +81,7 @@ class WeCli:
     def get_input(self):
         self.status = '<<'
         self.draw_status()
-        call(['nvim', '.tmp'])
+        call([self.editor, '.tmp'])
         with open('.tmp', 'r') as tf:
             self.msg_send = tf.read()
         self.refresh()
@@ -97,7 +96,7 @@ class WeCli:
                 self.response = itchat.send_msg(
                         msg=self.msg_send, toUserName=self.user)['BaseResponse']['RawMsg']
                 self.status = '>' + self.response
-                line = 'me > %s @ %s: %s' % (self.nick, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), self.msg_send)
+                line = '%s @ %s < %s' % (self.nick, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), self.msg_send)
                 with open(self.msgs_path(), 'a') as f:
                     f.write(line)
                 self.msgs.append(line)
@@ -110,7 +109,8 @@ class WeCli:
     def draw_status(self, clear=True):
         if clear:
             self.input_win.clear()
-        self.input_win.addstr(0, 0, self.nick + self.status)
+        self.input_win.addstr(0, 0, '--')
+        self.input_win.addstr(1, 0, self.nick + self.status)
         self.input_win.refresh()
 
     def select_contact(self):
@@ -158,6 +158,16 @@ class WeCli:
                     self.select_line = 0
                 if self.select_top < 0:
                     self.select_top = 0
+                self.msg_win.clear()
+                self.draw_select()
+            elif self.k == ord('g'):
+                self.select_line = 0
+                self.select_top = 0
+                self.msg_win.clear()
+                self.draw_select()
+            elif self.k == ord('G'):
+                self.select_line = len(self.contacts) - 1
+                self.select_top = len(self.contacts) - 1
                 self.msg_win.clear()
                 self.draw_select()
             elif self.k == 10:
@@ -244,7 +254,7 @@ class WeCli:
         self.msg_win.refresh()
 
     def make_wins(self):
-        self.input_height = 3
+        self.input_height = 2
         self.ym, self.xm = self.stdscr.getmaxyx()
         self.msg_height = self.ym - self.input_height
         self.stdscr.erase()

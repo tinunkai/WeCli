@@ -6,6 +6,7 @@ install:
 
 init:
 	python -m venv .venv
+	mkdir -p msgs
 
 try:
 	@.venv/bin/python try.py
