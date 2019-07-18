@@ -251,7 +251,7 @@ class WeCli:
     def draw_msg(self):
         self.msg_win.clear()
         lp = 0
-        for line in self.msgs[::-1][self.linetop:]:
+        for line in self.msgs[self.linetop:]:
             lh = len(line) // self.xm + 1
             if lp + lh > self.ym - self.input_height:
                 break
