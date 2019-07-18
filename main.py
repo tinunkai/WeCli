@@ -254,11 +254,11 @@ class WeCli:
         self.msg_win.clear()
         lp = 0
         for line in self.msgs[self.linetop:]:
-            lh = len(line) // self.xm + 1
-            if lp + lh > self.ym - self.input_height:
+            lh = 2 * len(line) // self.xm + 1
+            if lp + lh > self.msg_height:
                 break
             self.msg_win.addstr(lp, 0, line)
-            lp += lh
+            lp = self.msg_win.getyx()[0] + 1
         self.msg_win.refresh()
 
     def make_wins(self):
