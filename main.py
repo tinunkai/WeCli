@@ -80,6 +80,8 @@ class WeCli:
             elif self.k == ord('i'):
                 if self.user != 'WeCli':
                     self.get_input()
+            elif self.k == ord('e'):
+                call([self.editor, 'main.py'])
             elif self.k == curses.KEY_RESIZE:
                 self.make_wins()
             self.refresh()
