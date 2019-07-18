@@ -248,7 +248,7 @@ class WeCli:
             else:
                 line = '%s @ %s > %s\n' % (
                         name, datetime.fromtimestamp(msg['CreateTime']), msg.fileName)
-            self.msgs.append(line)
+            self.msgs.append(line.strip())
             with open(self.msgs_path(), 'a') as f:
                 f.write(line)
             #with open('slack.token.json', 'r') as f:
