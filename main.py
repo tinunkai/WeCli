@@ -99,7 +99,7 @@ class WeCli:
         self.draw_status()
         call([self.editor, '.tmp'])
         with open('.tmp', 'r') as tf:
-            self.msg_send = tf.read().strip()
+            self.msg_send = tf.read()
         self.refresh()
         self.send_msg()
 
@@ -115,7 +115,7 @@ class WeCli:
                 line = '%s @ %s < %s' % (self.nick, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), self.msg_send)
                 with open(self.msgs_path(), 'a') as f:
                     f.write(line)
-                self.msgs.append(line)
+                self.msgs.append(line.strip())
                 break
             if self.k == ord('n'):
                 self.status = '<canceled'
@@ -230,7 +230,7 @@ class WeCli:
                         name, datetime.fromtimestamp(msg['CreateTime']), msg.text)
             with open(self.msgs_path(), 'a') as f:
                 f.write(line)
-            self.msgs.append(line)
+            self.msgs.append(line.strip())
             self.draw_msg()
 
     def media_register(self):
