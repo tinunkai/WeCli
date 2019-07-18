@@ -42,6 +42,7 @@ wecli.py may run on Windows with the terminal supporting unicode
 - [x] new UI based on curses
 - [x] slack forward
 - [ ] colored message
+- [ ] send file
 - [ ] PGP functions
 
 [node-wechat-terminal]: https://github.com/goorockey/node-wechat-terminal
