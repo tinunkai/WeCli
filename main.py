@@ -95,7 +95,7 @@ class WeCli:
         self.draw_status()
         call([self.editor, '.tmp'])
         with open('.tmp', 'r') as tf:
-            self.msg_send = tf.read()
+            self.msg_send = tf.read().strip()
         self.refresh()
         self.send_msg()
 
@@ -260,8 +260,8 @@ class WeCli:
         self.msg_win.clear()
         lp = 0
         for line in self.msgs[self.linetop:]:
-            lh = len(line) // self.xm + 1
-            if lp + lh >= self.ym - self.input_height:
+            lh = 2 * len(line) // self.xm + 1
+            if lp + lh > self.msg_height:
                 break
             if '>>' in line:
                 self.msg_win.addstr(lp, 0, line, curses.color_pair(2))
@@ -269,7 +269,7 @@ class WeCli:
                 self.msg_win.addstr(lp, 0, line, curses.color_pair(3))
             else:
                 self.msg_win.addstr(lp, 0, line)
-            lp += lh
+            lp = self.msg_win.getyx()[0] + 1
         self.msg_win.refresh()
 
     def make_wins(self):
