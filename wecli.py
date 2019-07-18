@@ -1,3 +1,6 @@
+'''
+this is an old version of wecli which is not based on curses.
+'''
 from datetime import datetime
 import time
 import threading
@@ -12,9 +15,8 @@ try:
     import readline
 except:
     pass
-
 import requests
-import numpy as np
+
 import itchat
 import colorama
 
