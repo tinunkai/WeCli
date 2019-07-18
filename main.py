@@ -54,21 +54,25 @@ class WeCli:
                 self.msg_win.clear()
                 self.refresh()
             elif self.k == curses.ascii.ctrl(ord('d')):
+                if self.linetop == len(self.msgs) - 1: continue
                 self.linetop += self.msg_height // 2
                 if self.linetop > len(self.msgs) - 1:
                     self.linetop = len(self.msgs) - 1
                 self.draw_msg()
             elif self.k == curses.ascii.ctrl(ord('u')):
+                if self.linetop == 0: continue
                 self.linetop -= self.msg_height // 2
                 if self.linetop < 0:
                     self.linetop = 0
                 self.draw_msg()
             elif self.k == ord('j'):
+                if self.linetop == len(self.msgs) - 1: continue
                 self.linetop += 1
                 if self.linetop > len(self.msgs) - 1:
                     self.linetop = len(self.msgs) - 1
                 self.draw_msg()
             elif self.k == ord('k'):
+                if self.linetop == 0: continue
                 self.linetop -= 1
                 if self.linetop < 0:
                     self.linetop = 0
@@ -126,6 +130,7 @@ class WeCli:
         self.input_win.refresh()
 
     def select_contact(self, key):
+        self.select_line = self.select_top = 0
         self.msg_win.clear()
         self.contacts = list()
         friends = itchat.get_friends()
@@ -261,7 +266,7 @@ class WeCli:
         lp = 0
         for line in self.msgs[self.linetop:]:
             lh = 2 * len(line) // self.xm + 1
-            if lp + lh > self.msg_height:
+            if lp + lh >= self.msg_height:
                 break
             if '>>' in line:
                 self.msg_win.addstr(lp, 0, line, curses.color_pair(2))
