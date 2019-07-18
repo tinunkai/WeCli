@@ -91,7 +91,7 @@ class WeCli:
         self.draw_status()
         call([self.editor, '.tmp'])
         with open('.tmp', 'r') as tf:
-            self.msg_send = tf.read()
+            self.msg_send = tf.read().strip()
         self.refresh()
         self.send_msg()
 
