@@ -41,7 +41,7 @@ class WeCli:
         while True:
             self.k = self.stdscr.getch()
             if self.k == ord('q'):
-                if self.nick != 'WeCli':
+                if self.user != 'WeCli':
                     self.nick = self.user = 'WeCli'
                 else:
                     break
@@ -78,7 +78,8 @@ class WeCli:
             elif self.k == ord(':'):
                 self.select_contact()
             elif self.k == ord('i'):
-                self.get_input()
+                if self.user != 'WeCli':
+                    self.get_input()
             elif self.k == curses.KEY_RESIZE:
                 self.make_wins()
             self.refresh()
