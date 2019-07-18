@@ -9,29 +9,29 @@ optional(for simple installing and running)
 - [make][make]
 
 ## Install
-'''shell
+```shell
 make init
 make install
-'''
+```
 for using wecli.py
-'''shell
+```shell
 make oldinstall
-'''
+```
 
 ## Usage
 curses UI wecli:
-'''shell
+```shell
 make main
-'''
-vim-like key bind. j/k/C-u/C-d/g/G
-`:`: call select contact menu.
+```
+vim-like key bind. j/k/C-u/C-d/g/G  
+`:`: call select contact menu.  
 `i`: call system EDITOR for editing message (recommand neovim for unicode characters)
 
 cli UI wecli:
-'''shell
+```shell
 make cli
-'''
-wecli.py may run on Windows with the terminal supporting unicode
+```
+wecli.py may run on Windows with the terminal supporting unicode  
 `\h`: help message  
 `\l`: list contacts with id numbers  
 `\g [id]`: go into a contact  
