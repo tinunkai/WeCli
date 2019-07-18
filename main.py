@@ -16,6 +16,10 @@ from utils import print_cmd_qr
 
 class WeCli:
     def __init__(self, stdscr):
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)
         self.stdscr = stdscr
         self.moment = datetime.now()
         self.linetop = 0
@@ -75,8 +79,8 @@ class WeCli:
             elif self.k == ord('G'):
                 self.linetop = len(self.msgs) - 1
                 self.draw_msg()
-            elif self.k == ord(':'):
-                self.select_contact()
+            elif self.k in (ord(':'), ord('r'), ord('m')):
+                self.select_contact(self.k)
             elif self.k == ord('i'):
                 if self.user != 'WeCli':
                     self.get_input()
@@ -118,18 +122,20 @@ class WeCli:
         if clear:
             self.input_win.clear()
         self.input_win.addstr(0, 0, '--')
-        self.input_win.addstr(1, 0, self.nick + self.status)
+        self.input_win.addstr(1, 0, self.nick + self.status, curses.color_pair(1))
         self.input_win.refresh()
 
-    def select_contact(self):
+    def select_contact(self, key):
         self.msg_win.clear()
         self.contacts = list()
         friends = itchat.get_friends()
         groups = itchat.get_chatrooms()
-        for friend in friends:
-            self.contacts.append((friend['NickName'], friend['UserName']))
-        for group in groups:
-            self.contacts.append((group['NickName'], group['UserName']))
+        if key in (ord(':'), ord('m')):
+            for friend in friends:
+                self.contacts.append((friend['NickName'], friend['UserName']))
+        if key in (ord(':'), ord('r')):
+            for group in groups:
+                self.contacts.append((group['NickName'], group['UserName']))
 
         self.draw_select()
         while True:
@@ -196,7 +202,7 @@ class WeCli:
                 [self.select_top:self.select_top + self.ym - self.input_height]):
             if user == select_user:
                 nick = '>>> ' + nick
-                self.msg_win.addstr(y, 0, nick)
+                self.msg_win.addstr(y, 0, nick, curses.color_pair(1))
             else:
                 nick = '    ' + nick
                 self.msg_win.addstr(y, 0, nick)
@@ -255,9 +261,14 @@ class WeCli:
         lp = 0
         for line in self.msgs[self.linetop:]:
             lh = len(line) // self.xm + 1
-            if lp + lh > self.ym - self.input_height:
+            if lp + lh >= self.ym - self.input_height:
                 break
-            self.msg_win.addstr(lp, 0, line)
+            if '>>' in line:
+                self.msg_win.addstr(lp, 0, line, curses.color_pair(2))
+            elif '>' in line:
+                self.msg_win.addstr(lp, 0, line, curses.color_pair(3))
+            else:
+                self.msg_win.addstr(lp, 0, line)
             lp += lh
         self.msg_win.refresh()
 

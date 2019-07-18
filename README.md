@@ -24,7 +24,9 @@ curses UI wecli:
 make main
 ```
 vim-like key bind. j/k/C-u/C-d/g/G  
-`:`: call select contact menu.  
+`:`: call select contact menu  
+`m`: only search friends  
+`r`: only search groups  
 `i`: call system EDITOR for editing message (recommand neovim for unicode characters)
 
 cli UI wecli:
@@ -41,7 +43,7 @@ wecli.py may run on Windows with the terminal supporting unicode
 ## New Features
 - [x] new UI based on curses
 - [x] slack forward
-- [ ] colored message
+- [x] colored message
 - [ ] send file
 - [ ] PGP functions
 
