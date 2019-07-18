@@ -23,7 +23,7 @@ class WeCli:
         self.status = ''
         self.msg_send = ''
         self.editor = os.environ.get('EDITOR', 'vim')
-        self.nick, self.user = 'None', 'None'
+        self.nick = self.user = 'WeCli'
         if not os.path.exists(self.msgs_path()):
             with open(self.msgs_path(), 'w'): pass
         with open(self.msgs_path(), 'r') as f:
@@ -41,7 +41,10 @@ class WeCli:
         while True:
             self.k = self.stdscr.getch()
             if self.k == ord('q'):
-                break
+                if self.nick != 'WeCli':
+                    self.nick = self.user = 'WeCli'
+                else:
+                    break
             if self.k == curses.ascii.ctrl(ord('l')):
                 self.status = ''
                 self.msg_win.clear()
