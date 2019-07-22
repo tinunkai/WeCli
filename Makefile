@@ -1,5 +1,5 @@
 .PHONY: install init history main
-all: main
+all: try
 
 install:
 	.venv/bin/pip install --upgrade pip
@@ -17,6 +17,9 @@ history:
 
 main:
 	@.venv/bin/python main.py
+
+try:
+	@.venv/bin/python try.py
 
 cli:
 	@.venv/bin/python wecli.py
