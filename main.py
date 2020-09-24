@@ -88,8 +88,8 @@ class WeCli:
             elif self.k == ord('i'):
                 if self.user != 'WeCli':
                     self.get_input()
-            elif self.k == ord('e'):
-                call([self.editor, 'main.py'])
+            elif self.k == ord('m'):
+                pass
             elif self.k == curses.KEY_RESIZE:
                 self.make_wins()
             self.refresh()
@@ -237,10 +237,7 @@ class WeCli:
         @itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO],
                 isFriendChat=True, isGroupChat=True, isMpChat=True)
         def _media_register(msg):
-            try:
-                name = msg['User']['NickName']
-            except KeyError:
-                name = msg['User']['UserName']
+            name = msg['User'].get('NickName', msg['User']['UserName'])
             if 'ActualNickName' in msg:
                 line = '%s >> %s @ %s > %s\n' % (
                         name, msg['ActualNickName'],
@@ -251,10 +248,9 @@ class WeCli:
             self.msgs.append(line.strip())
             with open(self.msgs_path(), 'a') as f:
                 f.write(line)
-            #with open('slack.token.json', 'r') as f:
-            #    param = json.load(f)
-            #files = {'file': msg.download(None)}
-            #requests.post(url='https://slack.com/api/files.upload', params=param, files=files)
+            with open(os.path.join('media', datetime.now().strftime('%Y-%m-%d_%H-%M-%S_'))
+                      + msg.fileName, 'wb') as f:
+                f.write(msg.download(None))
             self.msg_win.refresh()
 
     def refresh(self):
@@ -285,18 +281,22 @@ class WeCli:
         self.msg_win = self.stdscr.subwin(self.msg_height, self.xm, 0, 0)
         self.input_win = self.stdscr.subwin(self.input_height, self.xm, self.msg_height, 0)
 
+
 def draw_menu(stdscr):
     wecli = WeCli(stdscr)
     itchat.run(blockThread=False)
     wecli()
+
 
 def main():
     itchat.utils.print_cmd_qr = print_cmd_qr
     itchat.auto_login(enableCmdQR=2, hotReload=True)
     curses.wrapper(draw_menu)
 
+
 def validator(ch):
     return ch
+
 
 if __name__ == "__main__":
     main()

@@ -4,7 +4,7 @@ and [itchat][itchat].
 
 ## Dependencies
 - unix like operating system (or whatever supporting curses)
-- [python3][python3]
+- [python3][python3]  
 optional(for simple installing and running)
 - [make][make]
 

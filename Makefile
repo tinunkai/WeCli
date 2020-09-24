@@ -11,6 +11,7 @@ oldinstall:
 init:
 	python -m venv .venv
 	mkdir -p msgs
+	mkdir -p media
 
 history:
 	@.venv/bin/python history.py >> history &
